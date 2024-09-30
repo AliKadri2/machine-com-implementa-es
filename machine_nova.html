@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Bases</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #63B1BC; /* Cor de fundo original */
+            background-image: url('https://i.pinimg.com/564x/b7/a1/b0/b7a1b08769803edd659cb1250cf7aa4b.jpg'); /* Adicione a imagem de fundo */
+            background-size: cover; /* Faz a imagem cobrir toda a tela */
+            background-position: center; /* Centraliza a imagem */
+            background-repeat: no-repeat; /* Evita repetição da imagem */
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #63B1BC;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 80%;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1F2A44;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        select,
+        button {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #ED145B;
+            color: #FFFFFF;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #EFB661;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #D0D3D4;
+            border: 1px solid #63666A;
+            text-align: left;
+            display: none;
+        }
+        
+
+        
+    </style>
+
+</head>
+
+<body>
+    <div id="container">
+        <h1 style="color: white;">  Soma</h1>
+        
+        <input type="text" id="input_soma" placeholder="digite o valor para soma"> 
+        <input type="text" id="input_soma2" placeholder="digite o valor para soma">
+        <div id="resultado" style="color: white;"></div>
+        <select name="Bases" id="select_baseentrada">
+            <option value="10">Decimal </option>
+            <option value="2"> Binario </option>
+            <option value="8"> Octal </option>
+            <option value="16">Hexadecimal</option>
+
+        </select>
+<br><br>
+        <button onclick = "calcular()"  > Somar bases </button> <br><br>
+        <h1 style="color: red;" >Conversor</h1>
+        <input id="inputValue" type="text" placeholder="Digite o valor" onkeyup="converter()">
+ 
+
+        <select id="inputBase">
+            <option value="decimal">Decimal</option>
+            <option value="hexadecimal">Hexadecimal</option>
+            <option value="octal">Octal</option>
+            <option value="binario">Binário</option>
+        </select>
+        <br><br>
+
+        <h3 style="color: white;">Converter para:</h3>
+        <input type="checkbox" id="convertDecimal"><label style="color: white;" for="convertDecimal"> Decimal</label>
+        <input type="checkbox" id="convertHexadecimal"><label style="color: white;"for="convertHexadecimal">Hexadecimal</label>
+        <input type="checkbox" id="convertOctal"><label style="color: white;" for=  "convertOctal">Octal</label>
+        <input type="checkbox" id="convertBinario"><label style="color: white;"  for="convertBinario">Binário</label>
+        <br><br>
+        <button onclick="converter()">Converter</button>
+        <div id="output"></div>
+    </div>
+    <script>
+
+        function calcular() {
+            var soma1 = input_soma.value 
+            var soma2 = input_soma2.value
+            const baseentrada = select_baseentrada.value
+            
+            const decimal = parseInt(soma1, baseentrada);
+
+            const decimal2 = parseInt(soma2, baseentrada);
+            
+
+            var valorsoma = decimal + decimal2 
+            
+            resultado.innerHTML = `${valorsoma} <br> <br> `
+
+
+
+        }
+        
+        function converter() {
+            var inputValue = document.getElementById('inputValue').value;
+            var inputBase = document.getElementById('inputBase').value;
+
+            if (!validarEntrada(inputValue, inputBase)) {
+                alert('Por favor, insira um número válido para a base selecionada.');
+                return;
+            }
+
+            var decimalValue = parseInt(inputValue, inputBase === 'hexadecimal' ? 16 : inputBase === 'octal' ? 8 : inputBase === 'binario' ? 2 : 10);
+            var outputHTML = '';
+
+            if (document.getElementById('convertDecimal').checked) {
+                output.style.display = 'block';
+                outputHTML += `<p>Decimal: ${decimalValue}</p>`;
+            }
+            if (document.getElementById('convertHexadecimal').checked) {
+                output.style.display = 'block';
+                outputHTML += `<p>Hexadecimal: ${decimalValue.toString(16).toUpperCase()}</p>`;
+            }
+            if (document.getElementById('convertOctal').checked) {
+                output.style.display = 'block';
+                outputHTML += `<p>Octal: ${decimalValue.toString(8)}</p>`;
+            }
+            if (document.getElementById('convertBinario').checked) {
+                output.style.display = 'block';
+                outputHTML += `<p>Binário: ${decimalValue.toString(2)}</p>`;
+            }
+            document.getElementById('output').innerHTML = outputHTML;
+        }
+
+        function validarEntrada(inputValue, inputBase) {
+
+            var validChars = '';
+
+            if (inputBase === 'decimal') {
+                validChars = '0123456789';
+            } else if (inputBase === 'hexadecimal') {
+                validChars = '0123456789ABCDEFabcdef';
+            } else if (inputBase === 'octal') {
+                validChars = '01234567';
+            } else if (inputBase === 'binario') {
+                validChars = '01';
+            }
+
+            for (var i = 0; i < inputValue.length; i++) {
+                if (validChars.indexOf(inputValue[i]) === -1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>
